@@ -1,0 +1,40 @@
+                +-------------------+
+                |      IStorage     |  <---- Interface (Abstraction)
+                |-------------------|
+                | +storeFile()      |
+                +-------------------+
+                       ▲
+        +--------------+-------------+
+        |                            |
++----------------+          +----------------+
+|  LocalStorage  |          |  CloudStorage  |
+|----------------|          |----------------|
+| +storeFile()   |          | +storeFile()   |
++----------------+          +----------------+
+
+                +---------------------+
+                |   BackupService     |
+                |---------------------|
+                | - storage: IStorage |
+                | + backup()          |
+                +---------------------+
+                         ▲
+                         |
+               Uses any implementation of IStorage
+
++----------------+       +----------------+
+|  FileMonitor   |       |     Logger     |
+|----------------|       |----------------|
+| +watchDir()    |       | + log()        |
++----------------+       +----------------+
+
+
+Class Interactions:
+* BackupService depends on IStorage (DIP - Dependency Inversion Principle).
+* IStorage is implemented by LocalStorage and CloudStorage (OCP, LSP).
+* BackupService calls storeFile() on any IStorage instance.
+* FileMonitor watches directories and triggers backup when a file changes (SRP).
+* Logger handles logging independently (SRP).
+
+This program should target the Desktop Downloads Documents Pictures Videos folders for windows
+Only back up files with these extensions: 
